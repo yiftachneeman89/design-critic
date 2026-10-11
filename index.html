@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design Critic</title>
+  <meta name="description" content="A strict design review of your Android app: every screen drawn from its XML, every design problem found, explained and tracked.">
+  <meta name="theme-color" content="#111114">
+  <link rel="icon" href="icons/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="icons/logo.svg" alt="" class="brand-logo">
+      <div>
+        <h1>Design Critic</h1>
+        <p class="brand-sub" id="projectName">A design review that doesn't go easy on you</p>
+      </div>
+    </div>
+    <div class="top-actions" id="topActions" hidden>
+      <button class="pill-btn" id="rescan" title="Pick the project folder again after you've made changes - fixed issues are detected automatically">Re-scan</button>
+      <button class="pill-btn" id="openOther">Open another project</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="landing" id="landing">
+      <div class="landing-copy">
+        <p class="kicker">Design review · Android</p>
+        <h2>Your app's design, judged without mercy.</h2>
+        <p>Pick an Android Studio project. Every screen is drawn exactly as its XML describes it, then checked against the rules real design reviews use. “It works” is not a pass.</p>
+        <ul class="checks">
+          <li><b>Contrast</b> every text measured against WCAG 2.2 AA</li>
+          <li><b>Touch targets</b> anything tappable under 48×48dp</li>
+          <li><b>Type</b> text under 12sp, sizes in dp, a missing type scale</li>
+          <li><b>Tokens</b> hard-coded colours and off-grid spacing</li>
+          <li><b>States</b> no empty, loading or error state where the code needs one</li>
+          <li><b>Labels &amp; copy</b> unlabelled icons, hard-coded strings, vague buttons</li>
+        </ul>
+      </div>
+      <label class="drop" id="drop">
+        <input type="file" id="folderInput" webkitdirectory multiple hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></svg>
+        <strong>Choose your project folder</strong>
+        <span>or drag it here · the folder with <code>app/</code> in it</span>
+        <small>Runs entirely in your browser. Nothing is uploaded.</small>
+      </label>
+      <p class="error" id="loadError" hidden></p>
+    </section>
+
+    <section class="loading" id="loading" hidden>
+      <div class="spinner"></div>
+      <p id="loadingText">Reading files…</p>
+    </section>
+
+    <section class="review" id="review" hidden>
+      <div class="summary" id="summary"></div>
+      <div class="cols">
+        <aside class="filters" id="filters"></aside>
+        <div class="list-col">
+          <div class="list-head">
+            <input type="search" id="search" placeholder="Search issues" autocomplete="off">
+            <span id="listCount"></span>
+          </div>
+          <div class="issue-list" id="issueList"></div>
+        </div>
+        <div class="detail" id="detail"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="stage" aria-hidden="true"></div>
+
+  <script src="js/engine/ingest.js?v=1"></script>
+  <script src="js/engine/resources.js?v=1"></script>
+  <script src="js/engine/analyze.js?v=1"></script>
+  <script src="js/engine/render.js?v=1"></script>
+  <script src="js/engine/layout.js?v=1"></script>
+  <script src="js/rules.js?v=1"></script>
+  <script src="js/app.js?v=1"></script>
+</body>
+</html>
