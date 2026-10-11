@@ -155,9 +155,15 @@ function recordHistory() {
   const sc = score();
   const open = app.issues.filter((i) => ["open", "progress"].includes(statusOf(i.key)));
   const bySev = Object.fromEntries(SEVERITIES.map((s) => [s, open.filter((i) => i.severity === s).length]));
+  const cats = Object.fromEntries(Object.keys(CATEGORIES).map((k) => [k, open.filter((i) => i.category === k).length]));
+  const perScreen = {};
+  for (const i of open) if (i.screen !== "__app") perScreen[i.screen] = (perScreen[i.screen] || 0) + 1;
+  const worst = Object.entries(perScreen).sort((a, b) => b[1] - a[1])[0];
   try {
     localStorage.setItem("dc.summary", JSON.stringify({
-      project: app.name, score: sc.value, grade: sc.grade, ...bySev, ...c,
+      project: app.name, score: sc.value, grade: sc.grade, ...bySev, ...c, cats,
+      worst: worst ? { screen: screenName(worst[0]), count: worst[1] } : null,
+      blockers: open.filter((i) => i.severity === "blocker").slice(0, 3).map((i) => i.title),
       total: app.issues.length + app.resolved.length, screens: Object.keys(app.model.screens).length, at: Date.now(),
     }));
   } catch {}
