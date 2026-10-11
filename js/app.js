@@ -163,6 +163,11 @@ function recordHistory() {
     localStorage.setItem("dc.summary", JSON.stringify({
       project: app.name, score: sc.value, grade: sc.grade, ...bySev, ...c, cats,
       worst: worst ? { screen: screenName(worst[0]), count: worst[1] } : null,
+      top: Object.entries(perScreen).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([id, n]) => ({
+        screen: screenName(id), count: n,
+        blocker: open.filter((i) => i.screen === id && i.severity === "blocker").length,
+        major: open.filter((i) => i.screen === id && i.severity === "major").length,
+      })),
       blockers: open.filter((i) => i.severity === "blocker").slice(0, 3).map((i) => i.title),
       total: app.issues.length + app.resolved.length, screens: Object.keys(app.model.screens).length, at: Date.now(),
     }));
