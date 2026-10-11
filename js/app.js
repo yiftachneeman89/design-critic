@@ -151,6 +151,16 @@ function recordHistory() {
   if (hist.length && hist[hist.length - 1].d === day) hist[hist.length - 1] = entry; else hist.push(entry);
   writeStore("history", hist.slice(-60));
   app.history = hist;
+  // what Review Deck shows on the Design Critic card
+  const sc = score();
+  const open = app.issues.filter((i) => ["open", "progress"].includes(statusOf(i.key)));
+  const bySev = Object.fromEntries(SEVERITIES.map((s) => [s, open.filter((i) => i.severity === s).length]));
+  try {
+    localStorage.setItem("dc.summary", JSON.stringify({
+      project: app.name, score: sc.value, grade: sc.grade, ...bySev, ...c,
+      total: app.issues.length + app.resolved.length, screens: Object.keys(app.model.screens).length, at: Date.now(),
+    }));
+  } catch {}
 }
 
 function setStatus(key, status) {

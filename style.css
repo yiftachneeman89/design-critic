@@ -352,3 +352,8 @@ main { flex: 1; min-height: 0; display: flex; }
 .dialog-scrim { grid-area: 1 / 1; z-index: 2; background: rgba(0,0,0,.5); display: grid; place-items: center; padding: 24px; }
 .dialog-card { width: 100%; max-height: 100%; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
 .under-dialog { grid-area: 1 / 1; }
+
+/* link back to Review Deck (shown when you came from there) */
+.deck-back { flex: none; display: inline-flex; align-items: center; height: 30px; padding: 0 11px; margin-right: 4px; border-radius: 999px; border: 1px solid #cfccc2; background: #fff; color: #141414; font: 600 12.5px Inter, system-ui, sans-serif; text-decoration: none; white-space: nowrap; }
+.deck-back:hover { border-color: #141414; }
+.topbar .brand { margin-right: auto; }
