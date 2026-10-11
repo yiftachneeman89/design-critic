@@ -252,6 +252,31 @@ main { flex: 1; min-height: 0; display: flex; }
 .mini-list button { text-align: left; font-size: 13.5px; }
 .mini-list button:hover { text-decoration: underline; }
 
+/* AI prompt */
+.ai-btn { display: inline-flex; align-items: center; gap: 7px; background: var(--ink); color: #fff; border-color: var(--ink); }
+.ai-btn:hover { background: #000; }
+.ai-btn svg { width: 16px; height: 16px; fill: #e5372c; stroke: none; }
+.ai-one { margin-left: auto; border-color: var(--ink); }
+.prompt-dialog { width: min(880px, calc(100vw - 40px)); max-height: calc(100vh - 60px); padding: 0; border: 0; border-radius: 16px; background: var(--paper); color: var(--ink); box-shadow: 0 30px 80px rgba(0,0,0,.3); }
+.prompt-dialog[open] { display: flex; flex-direction: column; }
+.prompt-dialog::backdrop { background: rgba(20,20,20,.45); backdrop-filter: blur(3px); }
+.pd-head { display: flex; gap: 16px; align-items: flex-start; padding: 20px 22px 12px; border-bottom: 1px solid var(--line); }
+.pd-head h2 { margin: 0 0 4px; font-size: 20px; letter-spacing: -.02em; }
+.pd-head p { margin: 0; color: var(--ink-2); font-size: 13.5px; }
+.pd-close { margin-left: auto; width: 34px; height: 34px; flex: none; border-radius: 8px; border: 1px solid var(--line-2); }
+.pd-close:hover { border-color: var(--ink); }
+.pd-body { display: flex; flex-direction: column; gap: 10px; padding: 14px 22px 18px; min-height: 0; flex: 1; }
+.pd-scopes { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13.5px; }
+.pd-scopes label, .pd-opt { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.pd-opt { font-size: 13px; color: var(--ink-2); }
+.pd-scopes input, .pd-opt input { accent-color: var(--ink); margin: 0; }
+#pdText { flex: 1; min-height: 340px; width: 100%; resize: vertical; border: 0; border-radius: 10px; padding: 14px 16px; background: #1b1b1f; color: #d6d6dc; font: 12px/1.6 var(--mono); }
+#pdText:focus { outline: 2px solid var(--blocker); }
+.pd-foot { display: flex; align-items: center; gap: 8px; }
+.pd-foot span { margin-right: auto; font-size: 12.5px; color: var(--ink-3); }
+.primary-btn { height: 36px; padding: 0 16px; border-radius: 8px; background: var(--blocker); color: #fff; font-weight: 600; }
+.primary-btn:hover { background: #a91c15; }
+
 /* off-screen stage where screens are drawn to be measured */
 #stage { position: fixed; left: -20000px; top: 0; width: 400px; pointer-events: none; }
 

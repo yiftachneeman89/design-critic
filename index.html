@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Design Critic</title>
   <meta name="description" content="A strict design review of your Android app: every screen drawn from its XML, every design problem found, explained and tracked.">
-  <meta name="theme-color" content="#111114">
+  <meta name="theme-color" content="#f4f3ef">
   <link rel="icon" href="icons/logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
   <header class="topbar">
@@ -22,6 +22,7 @@
       </div>
     </div>
     <div class="top-actions" id="topActions" hidden>
+      <button class="pill-btn ai-btn" id="aiPrompt" title="Get a prompt to paste into an AI coding assistant so it fixes these issues"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3Z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z"/></svg><span>Fix with AI</span></button>
       <button class="pill-btn" id="rescan" title="Pick the project folder again after you've made changes - fixed issues are detected automatically">Re-scan</button>
       <button class="pill-btn" id="openOther">Open another project</button>
     </div>
@@ -73,14 +74,26 @@
     </section>
   </main>
 
+  <dialog class="prompt-dialog" id="promptDialog">
+    <div class="pd-head">
+      <div>
+        <h2>Fix with AI</h2>
+        <p>Paste this into Claude, ChatGPT, Copilot or Gemini (ideally one that can edit your project, like Claude Code or Copilot in Android Studio). It lists every issue with the file, the view, why it's wrong and the exact change.</p>
+      </div>
+      <button class="pd-close" id="pdClose" aria-label="Close">✕</button>
+    </div>
+    <div class="pd-body"></div>
+  </dialog>
+
   <div id="stage" aria-hidden="true"></div>
 
-  <script src="js/engine/ingest.js?v=1"></script>
-  <script src="js/engine/resources.js?v=1"></script>
-  <script src="js/engine/analyze.js?v=1"></script>
-  <script src="js/engine/render.js?v=1"></script>
-  <script src="js/engine/layout.js?v=1"></script>
-  <script src="js/rules.js?v=1"></script>
-  <script src="js/app.js?v=1"></script>
+  <script src="js/engine/ingest.js?v=2"></script>
+  <script src="js/engine/resources.js?v=2"></script>
+  <script src="js/engine/analyze.js?v=2"></script>
+  <script src="js/engine/render.js?v=2"></script>
+  <script src="js/engine/layout.js?v=2"></script>
+  <script src="js/rules.js?v=2"></script>
+  <script src="js/prompt.js?v=2"></script>
+  <script src="js/app.js?v=2"></script>
 </body>
 </html>

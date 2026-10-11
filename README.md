@@ -19,6 +19,7 @@ A strict design review of an Android app. Pick an Android Studio project folder:
 - **On the screen**: the screen is drawn from its XML with the problem outlined. Tap targets show the 48dp area they should have.
 - **Fixes**: each issue explains why it's a problem and proposes a fix (a token to use, a component to swap in, or a layout change). It shows a before/after preview and the XML now vs. fixed.
 - **Status tracking**: open, in progress, fixed or won't fix, saved in your browser. Re-scan after changing the code: issues that are gone are marked fixed automatically, and "fixed" issues that are still there are re-opened. A history line shows progress over time.
+- **Fix with AI**: builds a ready-to-paste prompt for an AI coding assistant (Claude, ChatGPT, Copilot, Gemini) from the issues in the list, one screen, one issue, or all blockers. For each issue it includes the file, the view id, why it's wrong, the exact change and the current XML. It also lists your existing colour and spacing tokens so the fixes reuse them. You can copy it or download it as a .md file.
 - **Filters**: by screen, severity, category (accessibility, color, typography, layout, states, copy), platform (Android, iOS, web), status, or text search.
 - **Score**: a grade out of 100. Won't-fix still counts against it, because bad design doesn't become good by agreeing to keep it. Any open blocker caps the grade at D.
 

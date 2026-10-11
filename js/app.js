@@ -436,7 +436,8 @@ function explain(el, i) {
     <p class="where"><b>${esc(screenName(i.screen))}</b>${i.alsoOn?.length ? ` · also on ${i.alsoOn.map((x) => esc(screenName(x))).join(", ")}` : ""}${i.target?.layout ? ` · <code>${esc(i.target.layout)}.xml</code>` : ""}</p>
     ${i.gone ? `<p class="gone-note">This issue isn't detected any more - it was marked fixed automatically on the last scan.</p>` : ""}
     <div class="status-row">${Object.entries(STATUSES).map(([k, v]) => `<button class="st-btn st-${k} ${st === k ? "on" : ""}" data-st="${k}">${v}</button>`).join("")}
-      ${stInfo?.reopened ? `<span class="muted">Re-opened: it was marked fixed but is still there.</span>` : stInfo?.at ? `<span class="muted">since ${new Date(stInfo.at).toLocaleDateString()}</span>` : ""}</div>
+      ${stInfo?.reopened ? `<span class="muted">Re-opened: it was marked fixed but is still there.</span>` : stInfo?.at ? `<span class="muted">since ${new Date(stInfo.at).toLocaleDateString()}</span>` : ""}
+      ${i.gone ? "" : `<button class="st-btn ai-one" id="aiOne">AI prompt for this issue</button>`}</div>
     <h3>Why this is a problem</h3>
     <p class="why"></p>
     <div class="measured"></div>
@@ -448,6 +449,7 @@ function explain(el, i) {
   el.querySelector(".why").textContent = i.why || "";
   el.querySelector(".fix-text").textContent = i.fix?.text || "";
   for (const b of el.querySelectorAll("[data-st]")) b.onclick = () => setStatus(i.key, b.dataset.st);
+  if (el.querySelector("#aiOne")) el.querySelector("#aiOne").onclick = () => openPromptDialog("issue");
   if (i.measured?.mapping) {
     el.querySelector(".measured").innerHTML = `<div class="mapping">${i.measured.mapping.map((m) => `<code>${esc(m)}</code>`).join("")}</div>`;
   }
@@ -604,6 +606,9 @@ drop.addEventListener("dragleave", () => drop.classList.remove("over"));
 drop.addEventListener("drop", async (e) => { e.preventDefault(); drop.classList.remove("over"); load(await filesFromDrop(e.dataTransfer)); });
 $("openOther").onclick = () => { app = null; $("topActions").hidden = true; $("projectName").textContent = "A design review that doesn't go easy on you"; document.title = "Design Critic"; show("landing"); };
 $("rescan").onclick = () => $("folderInput").click();
+$("aiPrompt").onclick = () => openPromptDialog(selected ? "issue" : "list");
+$("pdClose").onclick = () => $("promptDialog").close();
+$("promptDialog").addEventListener("click", (e) => { if (e.target === $("promptDialog")) $("promptDialog").close(); });
 $("search").addEventListener("input", (e) => { filters.q = e.target.value.trim(); renderList(); renderDetail(); });
 document.addEventListener("keydown", (e) => {
   if (!app || $("review").hidden || e.target.tagName === "INPUT") return;

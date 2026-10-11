@@ -320,7 +320,7 @@ class Critic {
           const bgToken = this.nearestToken(bg, (p) => contrast(fgOn, p.rgb) >= need);
           const useToken = bgToken && colorDistance(bgToken.rgb, bg) < 60;  // a different hue would change the brand, not fix it
           const onButton = v.classList.contains("v-button") || !!v.closest(".v-button");
-          const attr = onButton ? "app:backgroundTint" : "android:background";
+          const attr = x.backgroundTint?.name || (onButton ? "app:backgroundTint" : x.background?.name || "android:background");
           this.issue(s, v, phone, {
             rule: "contrast", severity: sev, category: "accessibility", attrs: ["textColor", "backgroundTint", "background"],
             title: `Text contrast ${fmtRatio(ratio)} - needs ${need}:1: ${labelOf(v)}`,
