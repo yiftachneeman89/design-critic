@@ -10,12 +10,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=202610112238">
+  <link rel="stylesheet" href="style.css?v=202610112303">
 </head>
 <body>
   <header class="topbar">
-    <a class="deck-back" id="deckBack" href="/review-deck/" title="Back to Review Deck" hidden>&larr; Review Deck</a>
-    <script>try { if (sessionStorage.getItem("rd.from") || matchMedia("(display-mode: standalone)").matches) document.getElementById("deckBack").hidden = false; } catch (e) {}</script>
+    <a class="deck-back" href="/review-deck/" title="Back to Review Deck">&larr; Review Deck</a>
     <div class="brand">
       <img src="icons/logo.svg" alt="" class="brand-logo">
       <div>
@@ -25,39 +24,21 @@
     </div>
     <div class="top-actions" id="topActions" hidden>
       <button class="pill-btn ai-btn" id="aiPrompt" title="Get a prompt to paste into an AI coding assistant so it fixes these issues"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3Z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z"/></svg><span>Fix with AI</span></button>
-      <button class="pill-btn" id="rescan" title="Pick the project folder again after you've made changes - fixed issues are detected automatically">Re-scan</button>
-      <button class="pill-btn" id="openOther">Open another project</button>
     </div>
   </header>
 
   <main id="main">
-    <section class="landing" id="landing">
+    <section class="landing" id="landing" hidden>
       <div class="landing-copy">
-        <p class="kicker">Design review · Android</p>
-        <h2>Your app's design, judged without mercy.</h2>
-        <p>Pick an Android Studio project. Every screen is drawn exactly as its XML describes it, then checked against the rules real design reviews use. “It works” is not a pass.</p>
-        <ul class="checks">
-          <li><b>Contrast</b> every text measured against WCAG 2.2 AA</li>
-          <li><b>Touch targets</b> anything tappable under 48×48dp</li>
-          <li><b>Type</b> text under 12sp, sizes in dp, a missing type scale</li>
-          <li><b>Tokens</b> hard-coded colours and off-grid spacing</li>
-          <li><b>States</b> no empty, loading or error state where the code needs one</li>
-          <li><b>Labels &amp; copy</b> unlabelled icons, hard-coded strings, vague buttons</li>
-        </ul>
+        <h2>Couldn't review your project</h2>
+        <p class="error" id="loadError"></p>
+        <p><a href="/review-deck/">Back to Review Deck</a> to choose your code again.</p>
       </div>
-      <label class="drop" id="drop">
-        <input type="file" id="folderInput" webkitdirectory multiple hidden>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></svg>
-        <strong>Choose your project folder</strong>
-        <span>or drag it here · the folder with <code>app/</code> in it</span>
-        <small>Runs entirely in your browser. Nothing is uploaded.</small>
-      </label>
-      <p class="error" id="loadError" hidden></p>
     </section>
 
-    <section class="loading" id="loading" hidden>
+    <section class="loading" id="loading">
       <div class="spinner"></div>
-      <p id="loadingText">Reading files…</p>
+      <p id="loadingText">Loading your project…</p>
     </section>
 
     <section class="review" id="review" hidden>
@@ -89,13 +70,14 @@
 
   <div id="stage" aria-hidden="true"></div>
 
-  <script src="js/engine/ingest.js?v=202610112238"></script>
-  <script src="js/engine/resources.js?v=202610112238"></script>
-  <script src="js/engine/analyze.js?v=202610112238"></script>
-  <script src="js/engine/render.js?v=202610112238"></script>
-  <script src="js/engine/layout.js?v=202610112238"></script>
-  <script src="js/rules.js?v=202610112238"></script>
-  <script src="js/prompt.js?v=202610112238"></script>
-  <script src="js/app.js?v=202610112238"></script>
+  <script src="js/engine/ingest.js?v=202610112303"></script>
+  <script src="js/engine/resources.js?v=202610112303"></script>
+  <script src="js/engine/analyze.js?v=202610112303"></script>
+  <script src="js/engine/render.js?v=202610112303"></script>
+  <script src="js/engine/layout.js?v=202610112303"></script>
+  <script src="js/rules.js?v=202610112303"></script>
+  <script src="js/prompt.js?v=202610112303"></script>
+  <script src="/review-deck/shared.js?v=4"></script>
+  <script src="js/app.js?v=202610112303"></script>
 </body>
 </html>

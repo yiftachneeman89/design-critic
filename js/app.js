@@ -609,13 +609,6 @@ function xmlDiff(host, i) {
 
 // ---------------------------------------------------------------- events
 
-$("folderInput").addEventListener("change", (e) => { if (e.target.files.length) load(filesFromInput(e.target.files)); e.target.value = ""; });
-const drop = $("drop");
-drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
-drop.addEventListener("dragleave", () => drop.classList.remove("over"));
-drop.addEventListener("drop", async (e) => { e.preventDefault(); drop.classList.remove("over"); load(await filesFromDrop(e.dataTransfer)); });
-$("openOther").onclick = () => { app = null; $("topActions").hidden = true; $("projectName").textContent = "A design review that doesn't go easy on you"; document.title = "Design Critic"; show("landing"); };
-$("rescan").onclick = () => $("folderInput").click();
 $("aiPrompt").onclick = () => openPromptDialog(selected ? "issue" : "list");
 $("pdClose").onclick = () => $("promptDialog").close();
 $("promptDialog").addEventListener("click", (e) => { if (e.target === $("promptDialog")) $("promptDialog").close(); });
@@ -628,3 +621,6 @@ document.addEventListener("keydown", (e) => {
   const next = list[Math.max(0, Math.min(list.length - 1, idx + (e.key === "ArrowDown" ? 1 : -1)))];
   if (next) { e.preventDefault(); selected = next.key; renderList(); renderDetail(); document.querySelector(".issue.sel")?.scrollIntoView({ block: "nearest" }); }
 });
+
+// the project comes from Review Deck's sign-in, shared by all three tools
+if (!document.querySelector('script[src$="dev.js"]')) DeckStore.require().then((saved) => load(saved.items));
