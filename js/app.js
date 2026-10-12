@@ -61,7 +61,12 @@ async function load(items) {
     document.title = `${raw.name} · Design Critic`;
     show("review");
     selected = null;
+    // Review Deck links to one screen or one issue: ?screen=<id> / ?issue=<key>
+    const params = new URLSearchParams(location.search);
+    if (params.get("screen") && (params.get("screen") === "__app" || app.model.screens[params.get("screen")])) filters.screen = params.get("screen");
+    if (params.get("issue") && allItems().some((i) => i.key === params.get("issue"))) { selected = params.get("issue"); filters.status.clear(); }
     renderAll();
+    document.querySelector(".issue.sel")?.scrollIntoView({ block: "center" });
   } catch (err) {
     console.error(err);
     show("landing");
@@ -169,6 +174,8 @@ function recordHistory() {
         major: open.filter((i) => i.screen === id && i.severity === "major").length,
       })),
       blockers: open.filter((i) => i.severity === "blocker").slice(0, 3).map((i) => i.title),
+      // every open issue, small, for Review Deck's search, per-screen view and "since last time"
+      issues: open.slice(0, 400).map((i) => ({ k: i.key, t: i.title, s: i.screen, n: screenName(i.screen), v: i.severity, c: i.category })),
       total: app.issues.length + app.resolved.length, screens: Object.keys(app.model.screens).length, at: Date.now(),
     }));
   } catch {}
