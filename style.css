@@ -25,6 +25,56 @@
   --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
 }
 
+/* Black mode: chosen with the White/Black switch on Review Deck (/review-deck/theme.js).
+   The drawn screens and before/after stages keep the app's own colours. */
+:root[data-theme="dark"] {
+  --bg: #0e0e0f;
+  --paper: #18181a;
+  --ink: #f4f3ef;
+  --ink-2: #b4b3ad;
+  --ink-3: #85847e;
+  --line: #2a2a2d;
+  --line-2: #3a3a3e;
+  --accent: #f4f3ef;
+
+  --blocker: #ef4b40;
+  --blocker-bg: rgba(239, 75, 64, .14);
+  --major: #f07a2a;
+  --major-bg: rgba(240, 122, 42, .14);
+  --minor: #c9b33a;
+  --minor-bg: rgba(201, 179, 58, .14);
+
+  --st-open: #9a9a94;
+  --st-progress: #5b8def;
+  --st-fixed: #3fbf6f;
+  --st-wont: #a07cf5;
+  color-scheme: dark;
+}
+:root[data-theme="dark"] .brand-logo { border-radius: 9px; box-shadow: 0 0 0 1px var(--line-2); }
+:root[data-theme="dark"] code, :root[data-theme="dark"] .tag { background: #242427; }
+:root[data-theme="dark"] .grade b { color: #0e0e0f; }
+:root[data-theme="dark"] .grade-F b, :root[data-theme="dark"] .grade-D b, :root[data-theme="dark"] .grade-C b, :root[data-theme="dark"] .grade-B b, :root[data-theme="dark"] .grade-A b { color: #fff; }
+:root[data-theme="dark"] .grade-B b { background: #4d7c0f; }
+:root[data-theme="dark"] .grade-A b { background: #15803d; }
+:root[data-theme="dark"] .p-bar { background: #2a2a2e; }
+:root[data-theme="dark"] .filters { background: #141416; }
+:root[data-theme="dark"] .scr:hover { background: #242427; }
+:root[data-theme="dark"] .scr.on, :root[data-theme="dark"] .chip.on { color: #0e0e0f; }
+:root[data-theme="dark"] .scr.on small, :root[data-theme="dark"] .scr.on em, :root[data-theme="dark"] .chip.on small { color: #55554f; }
+:root[data-theme="dark"] .chip.sev-blocker.on, :root[data-theme="dark"] .chip.sev-major.on, :root[data-theme="dark"] .chip.sev-minor.on { color: #fff; }
+:root[data-theme="dark"] .chip.sev-blocker.on small, :root[data-theme="dark"] .chip.sev-major.on small, :root[data-theme="dark"] .chip.sev-minor.on small { color: rgba(255,255,255,.75); }
+:root[data-theme="dark"] .issue:hover { background: #1f1f22; }
+:root[data-theme="dark"] .issue.sel { background: #242427; }
+:root[data-theme="dark"] .phone-holder { box-shadow: 0 0 0 1px var(--line-2), 0 12px 30px rgba(0,0,0,.5); }
+:root[data-theme="dark"] .marker.focus { box-shadow: 0 0 0 4000px rgba(0,0,0,.45); }
+:root[data-theme="dark"] .marker.whole em { color: #141414; }
+:root[data-theme="dark"] .gone-note { background: rgba(63,191,111,.13); }
+:root[data-theme="dark"] .st-btn.on.st-open, :root[data-theme="dark"] .st-btn.on.st-progress, :root[data-theme="dark"] .st-btn.on.st-fixed, :root[data-theme="dark"] .st-btn.on.st-wont { color: #0e0e0f; }
+:root[data-theme="dark"] .ai-btn { color: #0e0e0f; }
+:root[data-theme="dark"] .ai-btn:hover { background: #ffffff; }
+:root[data-theme="dark"] #pdText { background: #111113; }
+:root[data-theme="dark"] .primary-btn:hover { background: #d6372d; }
+
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
 body { background: var(--bg); color: var(--ink); font: 14px/1.5 var(--ui); display: flex; flex-direction: column; overflow: hidden; }
@@ -357,4 +407,6 @@ main { flex: 1; min-height: 0; display: flex; }
 /* link back to Review Deck (shown when you came from there) */
 .deck-back { flex: none; display: inline-flex; align-items: center; height: 30px; padding: 0 11px; margin-right: 4px; border-radius: 999px; border: 1px solid #cfccc2; background: #fff; color: #141414; font: 600 12.5px Inter, system-ui, sans-serif; text-decoration: none; white-space: nowrap; }
 .deck-back:hover { border-color: #141414; }
+:root[data-theme="dark"] .deck-back { border-color: #3a3a3e; background: #18181a; color: #f4f3ef; }
+:root[data-theme="dark"] .deck-back:hover { border-color: #f4f3ef; }
 .topbar .brand { margin-right: auto; }
