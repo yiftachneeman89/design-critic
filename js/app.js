@@ -97,15 +97,25 @@ async function scanAll() {
   const critic = new Critic(app.model, app.res, app.renderer);
   const stage = $("stage");
   const screens = screensInOrder();
+  // screens that weren't measured this time - their old issues must not count as fixed
+  app.unscanned = new Set();
+  app.failed = [];
   for (const [i, s] of screens.entries()) {
     $("loadingText").textContent = `Reviewing ${friendlyName(s)} (${i + 1} of ${screens.length})…`;
     await tick();
-    if (!s.layout) continue;
-    const phone = app.renderer.screen(s);
-    stage.append(phone);
-    await settle(phone);
-    try { critic.scanScreen(s, phone); } catch (e) { console.error("scan failed for", s.id, e); }
-    phone.remove();
+    if (!s.layout) { app.unscanned.add(s.id); continue; }
+    let phone = null;
+    try {
+      phone = app.renderer.screen(s);
+      stage.append(phone);
+      await settle(phone);
+      critic.scanScreen(s, phone);
+    } catch (e) {
+      console.error("scan failed for", s.id, e);
+      app.unscanned.add(s.id);
+      app.failed.push(s.id);
+    }
+    phone?.remove();
   }
   const issues = critic.appWide();
   const order = { blocker: 0, major: 1, minor: 2 };
@@ -126,8 +136,11 @@ function syncTracking() {
   const known = readStore("known", {});
   const now = new Set(app.issues.map((i) => i.key));
   app.resolved = [];
+  app.held = [];
   for (const [key, info] of Object.entries(known)) {
     if (now.has(key)) continue;
+    // its screen wasn't measured this time: keep the issue as it was, don't call it fixed
+    if (app.unscanned?.has(info.screen)) { if (statusOf(key) !== "fixed") app.held.push(info); continue; }
     const st = app.status[key];
     if (!st || st.status === "open" || st.status === "progress") app.status[key] = { status: "fixed", at: Date.now(), auto: true };
     app.resolved.push({ ...info, key, gone: true });
@@ -151,14 +164,14 @@ function counts(list) {
 function recordHistory() {
   const hist = readStore("history", []);
   const day = new Date().toISOString().slice(0, 10);
-  const c = counts([...app.issues, ...app.resolved]);
+  const c = counts([...app.issues, ...app.resolved, ...app.held]);
   const entry = { d: day, ...c, score: score().value };
   if (hist.length && hist[hist.length - 1].d === day) hist[hist.length - 1] = entry; else hist.push(entry);
   writeStore("history", hist.slice(-60));
   app.history = hist;
   // what Review Deck shows on the Design Critic card
   const sc = score();
-  const open = app.issues.filter((i) => ["open", "progress"].includes(statusOf(i.key)));
+  const open = [...app.issues, ...app.held].filter((i) => ["open", "progress"].includes(statusOf(i.key)));
   const bySev = Object.fromEntries(SEVERITIES.map((s) => [s, open.filter((i) => i.severity === s).length]));
   const cats = Object.fromEntries(Object.keys(CATEGORIES).map((k) => [k, open.filter((i) => i.category === k).length]));
   const perScreen = {};
@@ -176,7 +189,8 @@ function recordHistory() {
       blockers: open.filter((i) => i.severity === "blocker").slice(0, 3).map((i) => i.title),
       // every open issue, small, for Review Deck's search, per-screen view and "since last time"
       issues: open.slice(0, 400).map((i) => ({ k: i.key, t: i.title, s: i.screen, n: screenName(i.screen), v: i.severity, c: i.category })),
-      total: app.issues.length + app.resolved.length, screens: Object.keys(app.model.screens).length, at: Date.now(),
+      unreviewed: new Set([...app.failed, ...app.held.map((i) => i.screen)]).size,
+      total: app.issues.length + app.resolved.length + app.held.length, screens: Object.keys(app.model.screens).length, at: Date.now(),
     }));
   } catch {}
 }
@@ -192,7 +206,7 @@ function setStatus(key, status) {
 
 function score() {
   let pen = 0, blockers = 0;
-  for (const i of app.issues) {
+  for (const i of [...app.issues, ...(app.held || [])]) {
     const st = statusOf(i.key);
     if (st === "fixed") continue;
     pen += SEV_WEIGHT[i.severity];
@@ -251,6 +265,7 @@ function renderSummary() {
     <div class="verdict">
       <p class="v-title">${esc(sc.verdict)}</p>
       <p class="v-sub">${app.issues.length} problems found across ${Object.keys(app.model.screens).length} screens. Won't-fix still counts against the score - bad design doesn't become good by agreeing to keep it.</p>
+      ${unreviewedNote()}
     </div>
     <div class="sev-counts">
       ${SEVERITIES.map((s) => `<button class="sev-count sev-${s} ${filters.severity.has(s) ? "on" : ""}" data-sev="${s}"><b>${sev[s]}</b><span>${s}</span></button>`).join("")}
@@ -263,6 +278,14 @@ function renderSummary() {
       <div class="p-hist">${spark}<span>${hist.length > 1 ? `unresolved over ${hist.length} days` : "history builds up as you re-scan on later days"}</span></div>
     </div>`;
   for (const b of $("summary").querySelectorAll("[data-sev]")) b.onclick = () => { toggle(filters.severity, b.dataset.sev); renderAll(); };
+}
+
+// screens that failed to draw, or lost their layout while they still had issues
+function unreviewedNote() {
+  const ids = new Set([...(app.failed || []), ...(app.held || []).map((i) => i.screen)]);
+  if (!ids.size) return "";
+  const held = (app.held || []).length;
+  return `<p class="v-sub unreviewed">Couldn't review ${ids.size} screen${ids.size === 1 ? "" : "s"} (${[...ids].map((id) => esc(screenName(id))).join(", ")}).${held ? ` ${ids.size === 1 ? "Its" : "Their"} ${held} earlier issue${held === 1 ? " is" : "s are"} kept as before and still count - a screen that wasn't checked isn't fixed.` : ""}</p>`;
 }
 
 function sparkline(vals) {
